@@ -17,7 +17,7 @@
     "description": "فيه لحظات بتتحول لذكريات، وناس بتتحول لبيت. الصفحة دي فيها شوية من لحظاتنا احنا.",
     "dateLabel": "من يوم",
     "date": "14.06.2026",
-    "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789778569048_1278.jpg",
+    "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789858040313_1695.jpg",
     "photoTag": "احنا بس أوف اح"
   },
   "story": [
@@ -44,22 +44,22 @@
   ],
   "memories": [
     {
-      "image": "",
+      "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789858063945_182.jpg",
       "date": "يوم ما اتقابلنا",
       "title": "ذكرى حبيبة لقلبي"
     },
     {
-      "image": "",
+      "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789858072841_9320.jpg",
       "date": "حاجات بسيطة",
       "title": "إحنا وبس"
     },
     {
-      "image": "",
+      "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789858079567_6797.jpg",
       "date": "في مكان ما",
       "title": "بعد ضهر هادي"
     },
     {
-      "image": "",
+      "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789858088554_2141.jpg",
       "date": "دايماً",
       "title": "وفيه لحظات جاية"
     }
@@ -123,7 +123,7 @@
   "music": {
     "enabled": true,
     "url": "",
-    "youtube": "https://www.youtube.com/watch?v=Pan1Fbez0jE",
+    "youtube": "https://www.youtube.com/shorts/lrQdAtKup9Q",
     "message": "دى أغنيتنا — دوسى هنا ❤"
   }
 }
