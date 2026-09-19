@@ -476,6 +476,15 @@ img{max-width:100%;display:block}
 .admin-save:disabled{opacity:.55;cursor:wait}
 .admin-gh-links{font-size:11px;line-height:1.9;color:var(--muted-soft);background:rgba(22,10,16,.5);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0 4px}
 .admin-gh-links code{background:rgba(202,162,90,.15);padding:1px 5px;border-radius:4px;color:var(--gold-soft)}
+.admin-up-cell{display:flex;gap:10px;align-items:flex-start;flex-direction:column}
+.admin-upload{
+  display:inline-flex;align-items:center;gap:7px;border:1px dashed rgba(202,162,90,.55);color:var(--gold);
+  background:rgba(202,162,90,.08);border-radius:9px;padding:8px 13px;font-size:12.5px;cursor:pointer;
+  transition:.2s;font-family:inherit;margin-top:12px;
+}
+.admin-upload:hover{background:rgba(202,162,90,.16)}
+.admin-upload .up-icon{font-size:15px}
+.admin-up-status{font-size:11px;color:var(--muted-soft);min-height:14px}
 @media(max-width:600px){.admin-row{grid-template-columns:1fr}}
 </style>
 </head>
@@ -493,7 +502,7 @@ img{max-width:100%;display:block}
 const SITE_DATA = {
   "names": {
     "first": "ابو علاء",
-    "second": "كل البنات"
+    "second": "الاحا"
   },
   "intro": {
     "kicker": "ركن خاص بينا",
@@ -795,7 +804,7 @@ const SITE_DATA = {
     </div>
     <div class="admin-body" id="adminBody"></div>
     <div class="admin-foot">
-      <span class="admin-status" id="adminStatus">الـ Token والأدوات محفوظة في متصفحك بس، ومفيش حاجة بتتخزن عندنا.</span>
+      <span class="admin-status" id="adminStatus">كل التعديلات بتتحفظ وتتظهر للبنت على نفس اللينك 💾</span>
       <button class="admin-save" id="adminSave" type="button">احفظ وانشر 💾</button>
     </div>
   </div>
@@ -1222,8 +1231,14 @@ function storyRepHtml(){
 function memRepHtml(){
   return `<div id="memRep">` + ADMIN.memories.map((m,i)=>`
     <div class="admin-repeater">
+      <div class="admin-up-cell">
+        <label class="admin-upload"><span class="up-icon">📷</span> رفع صورة من موبايلك أو الكمبيوتر
+          <input type="file" class="admin-file-up" id="am_up_${i}" accept="image/*" hidden>
+        </label>
+        <span class="admin-up-status" id="am_st_${i}">${m.image ? "الصورة محفوظة — تقدّر تغيّرها من الرفع أو اللينك" : "أو اكتب لينك صورة لو محببتش الرفع"}</span>
+      </div>
       <div class="admin-row">
-        <div>${field("رابط الصورة","am_img_"+i,m.image)}</div>
+        <div>${field("رابط الصورة (بيتعبي أوتوماتيك بعد الرفع)","am_img_"+i,m.image)}</div>
         <div>${field("التاريخ","am_date_"+i,m.date)}</div>
       </div>
       ${field("العنوان","am_title_"+i,m.title)}
@@ -1284,7 +1299,13 @@ function buildAdminForm(){
   h += field("تعليق على الصورة","af_heroTag",d.hero.photoTag);
   h += `</div>`;
   h += field("الوصف","af_heroDesc",d.hero.description,"textarea");
-  h += field("رابط الصورة الرئيسية","af_heroImage",d.hero.image,"url");
+  h += `<div class="admin-up-cell">
+    <label class="admin-upload"><span class="up-icon">📷</span> رفع الصورة الرئيسية من جهازك
+      <input type="file" class="admin-file-up" id="adHeroUp" accept="image/*" hidden>
+    </label>
+    <span class="admin-up-status" id="adHeroSt">${d.hero.image ? "الصورة محفوظة — تقدّر تغيّرها من الرفع أو اللينك" : "أو اكتب لينك الصورة تحت 👇"}</span>
+    <div style="width:100%">${field("رابط الصورة الرئيسية (بيتعبي أوتوماتيك بعد الرفع)","af_heroImage",d.hero.image,"url")}</div>
+  </div>`;
 
   h += `<h3 class="ad">حكايتكم (الخط الزمني)</h3>` + storyRepHtml();
   h += `<h3 class="ad">لحظاتكم (الذكريات)</h3>` + memRepHtml();
@@ -1316,20 +1337,9 @@ function buildAdminForm(){
   h += field("رابط يوتيوب (بياخد الصوت بس)","af_musicYoutube",d.music.youtube,"url");
   h += field("أو رابط MP3 مباشر","af_musicUrl",d.music.url,"url");
 
-  h += `<h3 class="ad">نشر التعديلات على نفس اللينك (GitHub)</h3>
-  <div class="admin-gh-links">
-    الموقع جي من ملف <code>data.json</code> في ربرو GitHub العادي بتاعك — التعديلات بتتكتب في الملف ده، فأول ما البنت
-    تفتح نفس اللينك (أو خلال دقيقة وهي فاتحاه) تشوف آخر حاجة.
-    عشان كده محتاج Token: GitHub → Settings → Developer settings → Personal access tokens → Generate new token
-    وزوّد له صلاحية <code>Contents: Read and write</code> على ربرو الموقع بس.
-    الـ Token بيتحفظ في متصفحك بس ومش بيتكتب في الموقع.
-  </div>`;
-  h += field("GitHub Token (سرّي)","af_token",ghStore.get("token",""),"password");
-  h += field("الربرو owner/repo (سيبها فاضية عشان تتعرف أوتوماتيك)","af_repo",ghRepoStr());
-  h += field("البرانتش (في الغالب main)","af_branch",GH.branch);
-
   $("adminBody").innerHTML = h;
   $("adminTitle").textContent = "لوحة التعديل — " + d.names.first + " ♥ " + d.names.second;
+  wireAdminUploads();
 }
 
 function collectFromAdminForm(){
@@ -1382,11 +1392,11 @@ function collectFromAdminForm(){
 }
 
 async function pushToGitHub(data){
-  const token = $v("af_token").trim();
-  const repoStr = $v("af_repo").trim();
+  const token = ghStore.get("token","").trim();
   let owner = GH.owner, repoName = GH.repo;
-  if(repoStr && repoStr.includes("/")){ const p = repoStr.split("/"); owner = p[0]; repoName = p[1]; }
-  const branch = $v("af_branch").trim() || "main";
+  const saved = ghStore.get("repo","");
+  if(saved && saved.includes("/")){ const p = saved.split("/"); owner = p[0]; repoName = p[1]; }
+  const branch = ghStore.get("branch","") || "main";
   if(!token || !owner || !repoName) return { ok:false, offline:true };
 
   const api = "https://api.github.com/repos/" + owner + "/" + repoName + "/contents/data.json";
@@ -1396,7 +1406,7 @@ async function pushToGitHub(data){
   try{
     const get = await fetch(api, { headers: authH });
     if(get.status === 200) sha = (await get.json()).sha;
-    else if(get.status !== 404) return { ok:false, err:"تعذر الاتصال بالربرو (" + get.status + ") — راجع الـ Token أو الربرو." };
+    else if(get.status !== 404) return { ok:false, err:"تعذر الاتصال بمخزن الموقع (" + get.status + ") — افتح اللينك اللي جالك من مطوّر الموقع تاني." };
   }catch(e){ return { ok:false, err:"مشكلة في الإنترنت: " + e.message }; }
 
   const body = {
@@ -1414,7 +1424,7 @@ async function pushToGitHub(data){
     if(!put.ok){
       let detail = "";
       try{ detail = (await put.json()).message || ""; }catch(e){}
-      return { ok:false, err:"الرفع فشل (" + put.status + "): " + detail };
+      return { ok:false, err:"الحفظ فشل (" + put.status + "): " + detail };
     }
     ghStore.set("token", token);
     ghStore.set("repo", (owner + "/" + repoName));
@@ -1424,23 +1434,100 @@ async function pushToGitHub(data){
   }catch(e){ return { ok:false, err:"مشكلة في الإنترنت: " + e.message }; }
 }
 
-function downloadDataJson(data){
+/* ---------- رفع الصور من جهاز الولد مباشرة ---------- */
+function readImageAsJpeg(file){
+  return new Promise((resolve, reject)=>{
+    const r = new FileReader();
+    r.onerror = () => reject(new Error("read"));
+    r.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error("image"));
+      img.onload = () => {
+        const MAX = 1200;
+        let w = img.naturalWidth, h = img.naturalHeight;
+        if(w > MAX || h > MAX){ const s = Math.min(MAX / w, MAX / h); w = Math.round(w*s); h = Math.round(h*s); }
+        const c = document.createElement("canvas");
+        c.width = w; c.height = h;
+        c.getContext("2d").drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL("image/jpeg", 0.82));
+      };
+      img.src = r.result;
+    };
+    r.readAsDataURL(file);
+  });
+}
+async function pushUpload(dataUrl){
+  const token = ghStore.get("token","").trim();
+  let owner = GH.owner, repoName = GH.repo;
+  const saved = ghStore.get("repo","");
+  if(saved && saved.includes("/")){ const p = saved.split("/"); owner = p[0]; repoName = p[1]; }
+  const branch = ghStore.get("branch","") || "main";
+  if(!token || !owner || !repoName) return { ok:false, offline:true };
+
+  const name = "photo_" + Date.now() + "_" + Math.floor(Math.random()*10000) + ".jpg";
+  const path = "uploads/" + name;
+  const api = "https://api.github.com/repos/" + owner + "/" + repoName + "/contents/" + path;
+  const authH = { Authorization:"Bearer " + token, Accept:"application/vnd.github+json" };
+  const content = dataUrl.split(",")[1];
+  let sha = null;
   try{
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type:"application/json;charset=utf-8" });
-    if(!window.URL || !URL.createObjectURL) return;
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = "data.json";
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url), 4000);
-  }catch(e){}
+    const get = await fetch(api, { headers: authH });
+    if(get.status === 200) sha = (await get.json()).sha;
+    else if(get.status !== 404) return { ok:false, err:"تعذر الوصول لمخزن الصور (" + get.status + ")" };
+  }catch(e){ return { ok:false, err:"مشكلة في الإنترنت: " + e.message }; }
+  try{
+    const put = await fetch(api, {
+      method:"PUT",
+      headers:{ ...authH, "Content-Type":"application/json" },
+      body: JSON.stringify({ message:"الصور 🖼 " + Date.now(), content, branch, ...(sha ? { sha } : {}) })
+    });
+    if(!put.ok) return { ok:false, err:"رفع الصورة فشل (" + put.status + ")" };
+    ghStore.set("token", token);
+    ghStore.set("repo", (owner + "/" + repoName));
+    ghStore.set("branch", branch);
+    GH = { owner, repo: repoName, branch };
+    return { ok:true, url: "https://raw.githubusercontent.com/" + owner + "/" + repoName + "/" + branch + "/" + path };
+  }catch(e){ return { ok:false, err:"مشكلة في الإنترنت: " + e.message }; }
+}
+function wireAdminUploads(){
+  document.querySelectorAll(".admin-file-up").forEach(inp=>{
+    inp.addEventListener("change", async ()=>{
+      const f = inp.files && inp.files[0];
+      if(!f) return;
+      const idx = inp.id;
+      const field = idx === "adHeroUp" ? $("af_heroImage") : $("am_img_" + idx.replace("am_up_",""));
+      const st = idx === "adHeroUp" ? $("adHeroSt") : $("am_st_" + idx.replace("am_up_",""));
+      if(!field || !st) return;
+      st.textContent = "بيجهز الصورة...";
+      st.style.color = "";
+      try{
+        const dataUrl = await readImageAsJpeg(f);
+        st.textContent = "بيرفع الصورة على مخزن الموقع...";
+        const res = await pushUpload(dataUrl);
+        if(res.ok){
+          field.value = res.url;
+          st.textContent = "اترفعت الصورة ✅ دوس 'احفظ وانشر' عشان تظهر على الموقع.";
+          st.style.color = "#8cdf9c";
+        }else if(res.offline){
+          st.textContent = "الرفع مش متاح في المتصفح ده حاليًا — اكتب لينك الصورة عادي.";
+          st.style.color = "";
+        }else{
+          st.textContent = "❌ " + (res.err || "حصلت مشكلة");
+          st.style.color = "#f2b8a0";
+        }
+      }catch(e){
+        st.textContent = "❌ الملف ده مش صورة صالحة";
+        st.style.color = "#f2b8a0";
+      }
+    });
+  });
 }
 
 $("gearBtn").addEventListener("click", ()=>{
   buildAdminForm();
   $("adminStatus").textContent = ghRepoStr()
-    ? "هنرفع على " + ghRepoStr() + "/" + GH.branch + " — أول ما البنت تفتح اللينك تشوف الجديد."
-    : "لسه الربرو ممعروفش — احتمل الملف لو مدخلتش Token.";
+    ? "التعديلات هتظهر للبنت على نفس اللينك فورًا."
+    : "المتصفح ده لسه مش مربوط بمخزن الموقع — افتح اللينك اللي جالك من مطوّر موقعك الأول.";
   $("adminPanel").classList.add("open");
 });
 $("adminClose").addEventListener("click", ()=>$("adminPanel").classList.remove("open"));
@@ -1457,13 +1544,12 @@ $("adminSave").addEventListener("click", async ()=>{
   btn.disabled = false;
   if(res.ok){
     lastRemoteStr = stableJSON(data);
-    $("adminStatus").textContent = "تم الرفع للموقع ✅ — أول ما البنت تفتح نفس اللينك هتشوف التغييرات (وخلال دقيقة لو مش مفتوح).";
+    $("adminStatus").textContent = "تم الحفظ والنشر ✅ — أول ما البنت تفتح نفس اللينك هتشوف التغييرات (وخلال دقيقة لو كانت فاتحاه).";
   }else if(res.offline){
     lastRemoteStr = stableJSON(data);
-    downloadDataJson(data);
-    $("adminStatus").textContent = "المتصفح ده مش مربوط بالربرو — اتحمّل الملف وارفعه في ربرو الموقع مكان data.json، ولا حط Token وكرّر.";
+    $("adminStatus").textContent = "تعديلاتك اتحفظت في الصفحة، بس المتصفح ده لسه محتاج تفعيل مرة واحدة — افتح اللينك اللي جهالك من مطوّر الموقع (اللي جواه تفعيل) من نفس الجهاز، وارجع هنا دوس احفظ تاني، ومن بعدها كل حاجة هتترفع أوتوماتيك.";
   }else{
-    $("adminStatus").textContent = "❌ " + (res.err || "حصلت مشكلة، راجعك تاني.");
+    $("adminStatus").textContent = "❌ " + (res.err || "حصلت مشكلة — جرب كمان مرة، ولو رجعت افتح اللينك اللي جالك من مطوّر الموقع.");
   }
 });
 </script>
