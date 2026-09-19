@@ -1,7 +1,7 @@
 {
   "names": {
     "first": "ابو علاء",
-    "second": "الاحا"
+    "second": "كثو"
   },
   "intro": {
     "kicker": "ركن خاص بينا",
@@ -123,7 +123,7 @@
   "music": {
     "enabled": false,
     "url": "",
-    "youtube": "",
+    "youtube": "https://www.youtube.com/watch?v=Pan1Fbez0jE",
     "message": "دى أغنيتنا — دوسى هنا ❤"
   }
 }
