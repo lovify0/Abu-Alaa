@@ -1,13 +1,13 @@
 {
   "names": {
     "first": "ابو علاء",
-    "second": "كثو تالت"
+    "second": "كثو تاني"
   },
   "intro": {
     "kicker": "ركن خاص بينا",
     "title": "حكايتنا",
     "subtitle": "كل حاجة حلوة بدأت من لحظة واحدة بسيطة.",
-    "secretWord": "بحبك اوف اح",
+    "secretWord": "بحبك",
     "adminSecret": "هيرو"
   },
   "hero": {
@@ -16,9 +16,9 @@
     "titleLine2": "وحكاية واحدة",
     "description": "فيه لحظات بتتحول لذكريات، وناس بتتحول لبيت. الصفحة دي فيها شوية من لحظاتنا احنا.",
     "dateLabel": "من يوم",
-    "date": "14.06.2024",
+    "date": "14.06.2026",
     "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789778569048_1278.jpg",
-    "photoTag": "احنا بس"
+    "photoTag": "احنا بس أوف اح"
   },
   "story": [
     {
