@@ -1,7 +1,7 @@
 {
   "names": {
     "first": "ابو علاء",
-    "second": "كثو"
+    "second": "كثو تاني"
   },
   "intro": {
     "kicker": "ركن خاص بينا",
@@ -17,7 +17,7 @@
     "description": "فيه لحظات بتتحول لذكريات، وناس بتتحول لبيت. الصفحة دي فيها شوية من لحظاتنا احنا.",
     "dateLabel": "من يوم",
     "date": "14.06.2024",
-    "image": "",
+    "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789778569048_1278.jpg",
     "photoTag": "احنا بس"
   },
   "story": [
