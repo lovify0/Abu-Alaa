@@ -1,7 +1,7 @@
 {
   "names": {
     "first": "ابو علاء",
-    "second": "كثو"
+    "second": "الاحا"
   },
   "intro": {
     "kicker": "ركن خاص بينا",
@@ -44,7 +44,7 @@
   ],
   "memories": [
     {
-      "image": "",
+      "image": "https://raw.githubusercontent.com/lovify0/Abu-Alaa/main/uploads/photo_1789778212177_3852.jpg",
       "date": "يوم ما اتقابلنا",
       "title": "ذكرى حبيبة لقلبي"
     },
@@ -123,7 +123,7 @@
   "music": {
     "enabled": false,
     "url": "",
-    "youtube": "https://www.youtube.com/watch?v=Pan1Fbez0jE",
+    "youtube": "",
     "message": "دى أغنيتنا — دوسى هنا ❤"
   }
 }
