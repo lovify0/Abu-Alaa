@@ -121,9 +121,9 @@
     "text": "شكراً على كل ضحكة، كل يوم عادي، كل رحلة، وكل لحظة صغيرة خلّت الحكاية دي حكايتنا احنا."
   },
   "music": {
-    "enabled": false,
+    "enabled": true,
     "url": "",
-    "youtube": "",
+    "youtube": "https://www.youtube.com/watch?v=Pan1Fbez0jE",
     "message": "دى أغنيتنا — دوسى هنا ❤"
   }
 }
