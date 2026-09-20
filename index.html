@@ -228,16 +228,17 @@ img{max-width:100%;display:block}
 @media(max-width:720px){.timeline:before{right:6px}.timeline-item,.timeline-item:nth-child(even){width:100%;margin:0;padding:0 34px 54px 0}.timeline-dot,.timeline-item:nth-child(even) .timeline-dot{inset-inline-end:auto;inset-inline-start:1px}}
 
 /* ============ MEMORY MOSAIC ============ */
-.memory-grid{display:grid;grid-template-columns:1.15fr .85fr .85fr;grid-auto-rows:230px;gap:14px}
+.memory-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));grid-auto-rows:230px;gap:14px}
+.memory-grid.grid-4{grid-template-columns:1.15fr .85fr .85fr}
+.memory-grid.grid-4 .memory-card:nth-child(1){grid-row:span 2}
+.memory-grid.grid-4 .memory-card:nth-child(4){grid-column:2 / 4}
 .memory-card{position:relative;overflow:hidden;border-radius:16px;background:#2c1622;cursor:pointer}
-.memory-card:nth-child(1){grid-row:span 2}
-.memory-card:nth-child(4){grid-column:2 / 4}
 .memory-card img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
 .memory-card:hover img{transform:scale(1.06)}
 .memory-overlay{position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(20,8,12,.82));display:flex;align-items:end;padding:20px;color:var(--paper)}
 .memory-overlay small{display:block;color:var(--gold-soft);font-size:11px;margin-bottom:5px}
 .memory-overlay h3{font-family:"Aref Ruqaa";font-size:22px;font-weight:400}
-@media(max-width:720px){.memory-grid{grid-template-columns:1fr 1fr;grid-auto-rows:170px}.memory-card:nth-child(1){grid-row:span 2}.memory-card:nth-child(4){grid-column:1 / 3}}
+@media(max-width:720px){.memory-grid{grid-template-columns:1fr 1fr;grid-auto-rows:170px}.memory-grid.grid-4 .memory-card:nth-child(1){grid-row:span 2}.memory-grid.grid-4 .memory-card:nth-child(4){grid-column:1 / 3}}
 
 /* ============ NOTE / LETTER ============ */
 .note-section{background:linear-gradient(180deg,var(--bg-deep),#1a0c13)}
@@ -428,6 +429,45 @@ img{max-width:100%;display:block}
 }
 .music-label .mini-heart{color:var(--rose);display:inline-block;animation:heartbeat 1.2s ease-in-out infinite}
 @keyframes heartbeat{0%,100%{transform:scale(1)}25%{transform:scale(1.25)}45%{transform:scale(.95)}65%{transform:scale(1.12)}}
+
+/* ============ مشغّل يوتيوب العائم (يظهر عند الإعلانات ويختفي أوتوماتيك) ============ */
+.yt-player-dock{
+  position:fixed;bottom:90px;left:16px;z-index:48;
+  width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden;
+  transition:opacity .3s ease,transform .3s ease;
+  transform:translateY(12px) scale(.96);
+}
+.yt-player-dock.active{
+  width:min(340px,calc(100vw - 32px));height:auto;opacity:1;pointer-events:auto;overflow:visible;
+  transform:translateY(0) scale(1);
+}
+.yt-player-box{
+  background:rgba(26,11,20,.96);backdrop-filter:blur(16px);
+  border:1px solid rgba(202,162,90,.38);border-radius:16px;padding:12px;
+  box-shadow:0 24px 70px rgba(0,0,0,.7),0 0 0 1px rgba(247,234,214,.1);
+}
+.yt-player-header{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-size:11.5px;
+}
+.yt-header-badge{display:flex;align-items:center;gap:6px;color:var(--gold-soft);font-weight:700}
+.yt-pulse-dot{width:8px;height:8px;border-radius:50%;background:#ff4757;animation:pulse 1.2s infinite}
+.yt-ctrl-btn{
+  background:rgba(247,234,214,.12);border:1px solid var(--line);color:var(--paper);
+  border-radius:999px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;transition:.2s;
+}
+.yt-ctrl-btn:hover{background:rgba(202,162,90,.25);color:var(--gold)}
+.yt-frame-slot{width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000}
+.yt-frame-slot iframe{width:100%;height:100%;border:0;display:block}
+.yt-player-tip{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;text-align:center}
+.yt-toggle-btn{
+  background:rgba(33,15,24,.88);backdrop-filter:blur(10px);
+  border:1px solid rgba(202,162,90,.4);color:var(--gold-soft);
+  border-radius:999px;padding:8px 14px;font-size:12px;font-family:inherit;font-weight:700;
+  cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);transition:.2s;
+}
+.yt-toggle-btn:hover{background:var(--gold);color:#241019}
+
 .music-bubble.playing ~ .music-label .mini-heart{animation:heartbeat .7s ease-in-out infinite}
 
 /* ============ لوحة الإدارة (بتظهر للولد بس) ============ */
@@ -486,6 +526,11 @@ img{max-width:100%;display:block}
 .admin-upload .up-icon{font-size:15px}
 .admin-up-status{font-size:11px;color:var(--muted-soft);min-height:14px}
 @media(max-width:600px){.admin-row{grid-template-columns:1fr}}
+
+.admin-emoji-quick{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0 10px;align-items:center}
+.admin-emoji-quick span{cursor:pointer;font-size:16px;padding:2px 6px;background:rgba(247,234,214,.08);border-radius:6px;transition:.2s}
+.admin-emoji-quick span:hover{background:rgba(202,162,90,.3);transform:scale(1.2)}
+
 </style>
 </head>
 
@@ -501,8 +546,8 @@ img{max-width:100%;display:block}
 /*SITE_DATA_START*/
 const SITE_DATA = {
   "names": {
-    "first": "ابو علاء",
-    "second": "الاحا"
+    "first": "أحمد",
+    "second": "سارة"
   },
   "intro": {
     "kicker": "ركن خاص بينا",
@@ -569,15 +614,42 @@ const SITE_DATA = {
     "title": "مليون سبب وسبب",
     "sub": "مش محتاج أفكر كتير — الأسباب دي جاية لوحدها من غير ما أسأل.",
     "items": [
-      "ضحكتك بتطلّع الشمس حتى في أسوأ الأيام.",
-      "طريقتك في الاهتمام بالناس اللي حواليكي.",
-      "إحساس إني ببقى نسخة أحسن من نفسي وأنا معاكي.",
-      "عنيّك اللي بتشوف فيّا أحلى حاجة.",
-      "صوتك أول ما ردّ عليّ التليفون.",
-      "كل التفاصيل الصغيرة اللي اتعلمت ألاحظها فيكي.",
-      "راحتك في حضني حتى لو الدنيا كلها لخبطة.",
-      "حتى لما تزعلي، برضه بتوصلي بالحنية اللي فيكي.",
-      "حلمك اللي دايماً بتكبره في عينيا."
+      {
+        "icon": "😍",
+        "text": "ضحكتك بتطلّع الشمس حتى في أسوأ الأيام."
+      },
+      {
+        "icon": "🥰",
+        "text": "طريقتك في الاهتمام بالناس اللي حواليكي."
+      },
+      {
+        "icon": "💕",
+        "text": "إحساس إني ببقى نسخة أحسن من نفسي وأنا معاكي."
+      },
+      {
+        "icon": "💖",
+        "text": "عنيّك اللي بتشوف فيّا أحلى حاجة."
+      },
+      {
+        "icon": "🫶",
+        "text": "صوتك أول ما ردّ عليّ التليفون."
+      },
+      {
+        "icon": "🌹",
+        "text": "كل التفاصيل الصغيرة اللي اتعلمت ألاحظها فيكي."
+      },
+      {
+        "icon": "✨",
+        "text": "راحتك في حضني حتى لو الدنيا كلها لخبطة."
+      },
+      {
+        "icon": "💘",
+        "text": "حتى لما تزعلي، برضه بتوصلي بالحنية اللي فيكي."
+      },
+      {
+        "icon": "💞",
+        "text": "حلمك اللي دايماً بتكبره في عينيا."
+      }
     ]
   },
   "promises": {
@@ -585,22 +657,27 @@ const SITE_DATA = {
     "sub": "مش هقولك كلام وأسيب، دي خطوات ناوي أعملهالك واحدة واحدة.",
     "items": [
       {
+        "icon": "🤝",
         "title": "هسمعك أكتر",
         "text": "وقت ما تتكلمي الحكاية كلها بتاخد مساحتها معايا، من غير ولا سراب."
       },
       {
+        "icon": "💍",
         "title": "هقرّب الفرح ليكي",
         "text": "هخلي كل يوم فينا فيه حاجة تستاهل تتحكي وتتفتكر."
       },
       {
+        "icon": "🌅",
         "title": "هفضل على وعدي",
         "text": "أي حاجة هقولك عليها، هكمّل فيها حتى لما تبقي صعبة."
       },
       {
+        "icon": "🕊️",
         "title": "هاخدك في جنّة صغيرة",
         "text": "مش بمسافات بعيدة — جنّة بتبدا من راحة البال والضحك معاكي."
       },
       {
+        "icon": "⭐",
         "title": "هخلي عينيا تشوفك… أحلى",
         "text": "هشوفك في كل مرحلة من عمرنا، وأنا في الشوفة نفسها من أول يوم."
       }
@@ -622,7 +699,7 @@ const SITE_DATA = {
     "text": "شكراً على كل ضحكة، كل يوم عادي، كل رحلة، وكل لحظة صغيرة خلّت الحكاية دي حكايتنا احنا."
   },
   "music": {
-    "enabled": false,
+    "enabled": true,
     "url": "",
     "youtube": "",
     "message": "دى أغنيتنا — دوسى هنا ❤"
@@ -719,7 +796,7 @@ const SITE_DATA = {
     <div class="container">
       <div class="section-head reveal">
         <div class="divider"><span>لحظاتنا</span></div>
-        <h2 class="section-title">قطع صغيرة مننا</h2>
+        <h2 class="section-title">كل لحظة معاكي ليها حكاية</h2>
         <p class="section-sub">الأماكن والوشوش واللحظات الصغيرة اللي تستاهل أكتر من مجرد صورة في الموبايل.</p>
       </div>
       <div class="memory-grid" id="memoryGrid"></div>
@@ -785,10 +862,32 @@ const SITE_DATA = {
   <img id="lightboxImage" alt="ذكرى">
 </div>
 
+<!-- مشغّل الفيديو العائم ليوتيوب: مخفي افتراضيًا وصوت فقط، ويظهر فقط لو في إعلان لعمل تخطي -->
+<div class="yt-player-dock" id="ytPlayerDock" aria-hidden="true">
+  <div class="yt-player-box" id="ytPlayerBox">
+    <div class="yt-player-header">
+      <div class="yt-header-badge">
+        <span class="yt-pulse-dot"></span>
+        <span id="ytStatusText">إعلان شغال — اضغط تخطي (Skip) ⏭️</span>
+      </div>
+      <div class="yt-player-ctrls">
+        <button type="button" class="yt-ctrl-btn" id="ytHideBtn" title="إخفاء الفيديو والاستماع للصوت فقط">_ إخفاء الفيديو</button>
+      </div>
+    </div>
+    <div class="yt-frame-slot" id="ytFrameSlot"></div>
+    <div class="yt-player-tip" id="ytPlayerTip">
+      زرار Skip الإعلان بيظهر داخل الفيديو. بمجرد التخطي الفيديو بيختفي وبيكمّل صوت بس.
+    </div>
+  </div>
+</div>
+
 <div class="music-dock" id="musicDock" style="display:none">
   <button class="music-bubble" id="musicBubble" type="button" aria-label="تشغيل الأغنية">
     <span class="music-rings"><span></span><span></span><span></span></span>
-    <span class="music-glyph" id="musicGlyph">♫</span>
+    <span class="music-glyph" id="musicGlyph">🎵</span>
+  </button>
+  <button class="yt-toggle-btn" id="ytToggleBtn" type="button" style="display:none" title="إظهار / إخفاء الفيديو لتخطي الإعلانات">
+    📺 <span id="ytToggleLabel">تخطي الإعلان</span>
   </button>
   <div class="music-label" id="musicLabel"></div>
 </div>
@@ -838,6 +937,7 @@ function applyData(){
     </article>
   `).join("");
 
+  $("memoryGrid").className = "memory-grid" + (SITE_DATA.memories.length === 4 ? " grid-4" : "");
   $("memoryGrid").innerHTML = SITE_DATA.memories.map((item,i) => `
     <article class="memory-card reveal" data-image="${item.image}" style="transition-delay:${Math.min(i,7)*90}ms">
       <img src="${item.image}" alt="${item.title}" loading="${i > 0 ? 'lazy' : 'eager'}">
@@ -849,25 +949,32 @@ function applyData(){
 
   $("reasonsTitle").textContent = SITE_DATA.reasons.title;
   $("reasonsSub").textContent = SITE_DATA.reasons.sub;
-  const reasonEmoji = ["😍","🥰","💕","💖","🫶","🌹","✨","💘","😘","💞"];
-  $("reasonsGrid").innerHTML = SITE_DATA.reasons.items.map((item,i) => `
-    <article class="reason-card reveal" style="transition-delay:${Math.min(i,7)*90}ms">
-      <div class="reason-num">${i+1}</div>
-      <div class="reason-heart">${reasonEmoji[i % reasonEmoji.length]}</div>
-      <p>${item}</p>
-    </article>
-  `).join("");
+  const defaultReasonEmoji = ["😍","🥰","💕","💖","🫶","🌹","✨","💘","😘","💞"];
+  $("reasonsGrid").innerHTML = SITE_DATA.reasons.items.map((item,i) => {
+    const text = typeof item === "string" ? item : (item.text || "");
+    const icon = (typeof item === "object" && item.icon) ? item.icon : defaultReasonEmoji[i % defaultReasonEmoji.length];
+    return `
+      <article class="reason-card reveal" style="transition-delay:${Math.min(i,7)*90}ms">
+        <div class="reason-num">${i+1}</div>
+        <div class="reason-heart">${icon}</div>
+        <p>${text}</p>
+      </article>
+    `;
+  }).join("");
 
   $("promisesTitle").textContent = SITE_DATA.promises.title;
   $("promisesSub").textContent = SITE_DATA.promises.sub;
-  const promiseEmoji = ["🤝","💍","🌅","🕊️","⭐","💌"];
-  $("promisesGrid").innerHTML = SITE_DATA.promises.items.map((item,i) => `
-    <article class="promise-card reveal" style="transition-delay:${Math.min(i,7)*90}ms">
-      <div class="promise-seal">${promiseEmoji[i % promiseEmoji.length]}</div>
-      <h3>${item.title}</h3>
-      <p>${item.text}</p>
-    </article>
-  `).join("");
+  const defaultPromiseEmoji = ["🤝","💍","🌅","🕊️","⭐","💌"];
+  $("promisesGrid").innerHTML = SITE_DATA.promises.items.map((item,i) => {
+    const icon = (item && item.icon) ? item.icon : defaultPromiseEmoji[i % defaultPromiseEmoji.length];
+    return `
+      <article class="promise-card reveal" style="transition-delay:${Math.min(i,7)*90}ms">
+        <div class="promise-seal">${icon}</div>
+        <h3>${item.title}</h3>
+        <p>${item.text}</p>
+      </article>
+    `;
+  }).join("");
 
   const secondName = SITE_DATA.names.second;
   const stripWords = [`بحبك يا ${secondName}`,`إنتِ حياتي يا ${secondName}`,`قلبي ملكك يا ${secondName}`,`بحبك بحبك يا ${secondName}`];
@@ -886,13 +993,14 @@ function applyData(){
   $("finalText").textContent = SITE_DATA.final.text;
   $("footerNames").textContent = `${SITE_DATA.names.first} ♥ ${SITE_DATA.names.second} · ${SITE_DATA.hero.date}`;
 
-  if(SITE_DATA.music.enabled && (SITE_DATA.music.url || SITE_DATA.music.youtube)){
+  if(SITE_DATA.music.enabled){
     const msg = SITE_DATA.music.message || "دى أغنيتنا — دوسى هنا";
     $("musicLabel").innerHTML = `${msg} <span class="mini-heart">♥</span>`;
     $("musicDock").style.display = "flex";
     if(SITE_DATA.music.url) $("audio").src = SITE_DATA.music.url;
   }else{
     $("musicDock").style.display = "none";
+    if(typeof stopYouTube === "function") stopYouTube();
   }
 }
 applyData();
@@ -972,46 +1080,163 @@ const observer = new IntersectionObserver(entries=>{
 },{threshold:.12});
 document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 
-/* ===== الأغنية: يوتيوب (صوت بس) أو رابط مباشر ===== */
+/* ===== الأغنية: يوتيوب (صوت بس بالديفولت، ويظهر الفيديو فقط لو في إعلان لتخطيه) ===== */
 const musicBubble=$("musicBubble");
 const musicGlyph=$("musicGlyph");
 let ytFrame=null;
+let ytCurrentVideoId=null;
+let ytIsAdPlaying=false;
+let ytUserManuallyOpened=false;
 
 function ytVideoId(url){
   const m=String(url||"").match(/(?:youtube\.com\/(?:watch\?[^#]*v=|embed\/|shorts\/|live\/)|youtu\.be\/|music\.youtube\.com\/watch\?[^#]*v=)([\w-]{11})/);
   return m?m[1]:null;
 }
+
 function setMusicUI(playing){
-  musicBubble.classList.toggle("playing",playing);
-  musicGlyph.textContent = playing ? "Ⅱ" : "♫";
+  musicBubble.classList.toggle("playing", playing);
+  musicGlyph.textContent = playing ? "⏸" : "🎵";
 }
+
+function showVideoPopup(show, reasonText){
+  const dock = $("ytPlayerDock");
+  const toggleBtn = $("ytToggleBtn");
+  const statusTxt = $("ytStatusText");
+  if(!dock) return;
+  if(show){
+    dock.classList.add("active");
+    dock.setAttribute("aria-hidden", "false");
+    if(statusTxt && reasonText) statusTxt.textContent = reasonText;
+    if(toggleBtn){
+      toggleBtn.style.display = "inline-flex";
+      $("ytToggleLabel").textContent = "إخفاء الفيديو";
+    }
+  }else{
+    dock.classList.remove("active");
+    dock.setAttribute("aria-hidden", "true");
+    if(toggleBtn){
+      toggleBtn.style.display = ytFrame ? "inline-flex" : "none";
+      $("ytToggleLabel").textContent = "تخطي الإعلان 📺";
+    }
+  }
+}
+
+function handleAdStateChange(isAd){
+  ytIsAdPlaying = isAd;
+  if(isAd){
+    // إعلان شغال: يظهر الفيديو فوراً لتمكين المستخدم من الضغط على تخطي الإعلان (Skip)
+    showVideoPopup(true, "إعلان شغال — اضغط تخطي (Skip) ⏭️");
+  }else{
+    // لا يوجد إعلان أو تم تخطيه: يتم إخفاء الفيديو أوتوماتيكياً والاستمرار كصوت فقط
+    if(!ytUserManuallyOpened){
+      showVideoPopup(false);
+    }
+  }
+}
+
 function startYouTube(videoId){
   if(ytFrame) stopYouTube();
-  const frame=document.createElement("iframe");
-  frame.src="https://www.youtube.com/embed/"+videoId+"?autoplay=1&loop=1&playlist="+videoId+"&playsinline=1&rel=0";
-  frame.setAttribute("allow","autoplay; encrypted-media; picture-in-picture; fullscreen");
-  frame.setAttribute("allowFullScreen","");
-  frame.title="YouTube music player";
-  frame.style.cssText="position:fixed;top:0;left:-9999px;width:1px;height:1px;border:0;opacity:0;pointer-events:none;z-index:-1";
-  document.body.appendChild(frame);
-  ytFrame=frame;
+  ytCurrentVideoId = videoId;
+  ytIsAdPlaying = false;
+  ytUserManuallyOpened = false;
+
+  const frame = document.createElement("iframe");
+  // استخدام youtube-nocookie لتخفيف الإعلانات + تمكين jsapi لمتابعة حالة الإعلانات
+  frame.src = "https://www.youtube-nocookie.com/embed/" + videoId + "?autoplay=1&enablejsapi=1&playsinline=1&rel=0";
+  frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture; fullscreen");
+  frame.setAttribute("allowFullScreen", "");
+  frame.title = "مشغّل الأغنية";
+
+  $("ytFrameSlot").innerHTML = "";
+  $("ytFrameSlot").appendChild(frame);
+  ytFrame = frame;
+
+  // الديفولت: الفيديو غير ظاهر (صوت فقط)
+  showVideoPopup(false);
+  if($("ytToggleBtn")) $("ytToggleBtn").style.display = "inline-flex";
   setMusicUI(true);
+
+  // إرسال رسالة استماع للإطار لضمان استلام إشعارات infoDelivery عند بدء إعلانات
+  frame.addEventListener("load", ()=>{
+    try{
+      frame.contentWindow.postMessage(JSON.stringify({ event: "listening", id: 1, channel: "widget" }), "*");
+    }catch(e){}
+  });
 }
+
 function stopYouTube(){
-  if(ytFrame){ ytFrame.remove(); ytFrame=null; }
+  if(ytFrame){
+    $("ytFrameSlot").innerHTML = "";
+    ytFrame = null;
+  }
+  showVideoPopup(false);
+  if($("ytToggleBtn")) $("ytToggleBtn").style.display = "none";
   setMusicUI(false);
 }
-musicBubble.addEventListener("click",()=>{
-  const ytId=ytVideoId(SITE_DATA.music.youtube);
+
+// متابعة رسائل مشغّل يوتيوب لاكتشاف الإعلانات أوتوماتيكياً
+window.addEventListener("message", e => {
+  if(!ytFrame) return;
+  try{
+    const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+    if(!data) return;
+
+    if(data.event === "infoDelivery" && data.info){
+      const info = data.info;
+      let isAd = false;
+      if(info.adState != null && info.adState !== 0) isAd = true;
+      else if(info.isAd === true) isAd = true;
+      else if(info.adVideoId && info.adVideoId !== ytCurrentVideoId) isAd = true;
+      else if(info.videoData && info.videoData.isAd) isAd = true;
+      else if(info.videoData && info.videoData.video_id && ytCurrentVideoId && info.videoData.video_id !== ytCurrentVideoId) isAd = true;
+
+      if(info.playerState === 1 && !isAd){
+        // الأغنية الأصلية تعمل بدون إعلانات -> إخفاء الفيديو فوراً (صوت فقط)
+        handleAdStateChange(false);
+      }else if(isAd){
+        // إعلان بدأ -> إظهار الفيديو لتخطي الإعلان
+        handleAdStateChange(true);
+      }
+    }else if(data.event === "onAdStart" || data.info === "adStart"){
+      handleAdStateChange(true);
+    }else if(data.event === "onAdEnd" || data.info === "adEnd"){
+      handleAdStateChange(false);
+    }
+  }catch(err){}
+});
+
+$("ytHideBtn").addEventListener("click", ()=>{
+  ytUserManuallyOpened = false;
+  showVideoPopup(false);
+});
+
+$("ytToggleBtn").addEventListener("click", ()=>{
+  const dock = $("ytPlayerDock");
+  const isActive = dock && dock.classList.contains("active");
+  if(isActive){
+    ytUserManuallyOpened = false;
+    showVideoPopup(false);
+  }else{
+    ytUserManuallyOpened = true;
+    showVideoPopup(true, "مشغّل الأغنية 🎵");
+  }
+});
+
+musicBubble.addEventListener("click", ()=>{
+  const ytId = ytVideoId(SITE_DATA.music.youtube);
   if(ytId){
     if(musicBubble.classList.contains("playing")){ stopYouTube(); }
     else{ startYouTube(ytId); }
     return;
   }
-  const audio=$("audio");
-  if(!audio.getAttribute("src")) return;
-  if(audio.paused){ audio.play().then(()=>setMusicUI(true)).catch(()=>{}); }
-  else{ audio.pause(); setMusicUI(false); }
+  const audio = $("audio");
+  if(SITE_DATA.music.url){
+    audio.src = SITE_DATA.music.url;
+    if(audio.paused){ audio.play().then(()=>setMusicUI(true)).catch(()=>{}); }
+    else{ audio.pause(); setMusicUI(false); }
+    return;
+  }
+  alert("ضيف رابط الأغنية من لوحة التحكم ⚙ أو ملف الإعدادات 🎵");
 });
 
 /* ===== زرار "بحبك" وانفجار القلوب ===== */
@@ -1216,8 +1441,51 @@ const $chk = id => $(id).checked;
 
 let ADMIN = { story:[], memories:[], reasons:[], promises:[] };
 
+function syncStoryFromDOM(){
+  const rows = document.querySelectorAll("#storyRep .admin-repeater");
+  if(rows.length > 0){
+    ADMIN.story = [...rows].map(row => ({
+      date: (row.querySelector('[id^="as_date_"]') || {}).value || "",
+      title: (row.querySelector('[id^="as_title_"]') || {}).value || "",
+      text: (row.querySelector('[id^="as_text_"]') || {}).value || ""
+    }));
+  }
+}
+
+function syncMemFromDOM(){
+  const rows = document.querySelectorAll("#memRep .admin-repeater");
+  if(rows.length > 0){
+    ADMIN.memories = [...rows].map(row => ({
+      image: (row.querySelector('[id^="am_img_"]') || {}).value || "",
+      date: (row.querySelector('[id^="am_date_"]') || {}).value || "",
+      title: (row.querySelector('[id^="am_title_"]') || {}).value || ""
+    }));
+  }
+}
+
+function syncReasonsFromDOM(){
+  const rows = document.querySelectorAll("#reasonsRep .admin-repeater");
+  if(rows.length > 0){
+    ADMIN.reasons = [...rows].map(row => ({
+      icon: (row.querySelector('[id^="ar_icon_"]') || {}).value || "💖",
+      text: (row.querySelector('[id^="ar_text_"]') || {}).value || ""
+    }));
+  }
+}
+
+function syncPromisesFromDOM(){
+  const rows = document.querySelectorAll("#promRep .admin-repeater");
+  if(rows.length > 0){
+    ADMIN.promises = [...rows].map(row => ({
+      icon: (row.querySelector('[id^="ap_icon_"]') || {}).value || "🤝",
+      title: (row.querySelector('[id^="ap_title_"]') || {}).value || "",
+      text: (row.querySelector('[id^="ap_text_"]') || {}).value || ""
+    }));
+  }
+}
+
 function storyRepHtml(){
-  return `<div id="storyRep">` + ADMIN.story.map((m,i)=>`
+  return `<div id="storyRep">` + (ADMIN.story || []).map((m,i)=>`
     <div class="admin-repeater">
       <div class="admin-row">
         <div>${field("التاريخ","as_date_"+i,m.date)}</div>
@@ -1228,8 +1496,9 @@ function storyRepHtml(){
     </div>`).join("") + `</div>
     <button type="button" class="admin-add" onclick="event.preventDefault();adminAddStory()">+ ضيف لحظة</button>`;
 }
+
 function memRepHtml(){
-  return `<div id="memRep">` + ADMIN.memories.map((m,i)=>`
+  return `<div id="memRep">` + (ADMIN.memories || []).map((m,i)=>`
     <div class="admin-repeater">
       <div class="admin-up-cell">
         <label class="admin-upload"><span class="up-icon">📷</span> رفع صورة من موبايلك أو الكمبيوتر
@@ -1239,47 +1508,149 @@ function memRepHtml(){
       </div>
       <div class="admin-row">
         <div>${field("رابط الصورة (بيتعبي أوتوماتيك بعد الرفع)","am_img_"+i,m.image)}</div>
-        <div>${field("التاريخ","am_date_"+i,m.date)}</div>
+        <div>${field("التاريخ / وصف صغير","am_date_"+i,m.date)}</div>
       </div>
       ${field("العنوان","am_title_"+i,m.title)}
       <button type="button" class="admin-del" onclick="event.preventDefault();adminRemMem(${i})">حذف الذكرى</button>
     </div>`).join("") + `</div>
     <button type="button" class="admin-add" onclick="event.preventDefault();adminAddMem()">+ ضيف ذكرى</button>`;
 }
-function reasonsRepHtml(){
-  return `<div id="reasonsRep">` + ADMIN.reasons.map((t,i)=>`
-    <div class="admin-repeater">
-      ${field("سبب رقم "+(i+1),"ar_text_"+i,t,"textarea")}
-      <button type="button" class="admin-del" onclick="event.preventDefault();adminRemReason(${i})">حذف السبب</button>
-    </div>`).join("") + `</div>
-    <button type="button" class="admin-add" onclick="event.preventDefault();adminAddReason()">+ ضيف سبب</button>`;
-}
-function promisesRepHtml(){
-  return `<div id="promRep">` + ADMIN.promises.map((p,i)=>`
-    <div class="admin-repeater">
-      <div class="admin-row">
-        <div>${field("عنوان الوعد","ap_title_"+i,p.title)}</div>
-        <div>${field("الوصف","ap_text_"+i,p.text)}</div>
-      </div>
-      <button type="button" class="admin-del" onclick="event.preventDefault();adminRemPromise(${i})">حذف الوعد</button>
-    </div>`).join("") + `</div>
-    <button type="button" class="admin-add" onclick="event.preventDefault();adminAddPromise()">+ ضيف وعد</button>`;
-}
-function adminAddStory(){ ADMIN.story.push({date:"",title:"",text:""}); buildAdminForm(); }
-function adminRemStory(i){ ADMIN.story.splice(i,1); buildAdminForm(); }
-function adminAddMem(){ ADMIN.memories.push({image:"",date:"",title:""}); buildAdminForm(); }
-function adminRemMem(i){ ADMIN.memories.splice(i,1); buildAdminForm(); }
-function adminAddReason(){ ADMIN.reasons.push(""); buildAdminForm(); }
-function adminRemReason(i){ ADMIN.reasons.splice(i,1); buildAdminForm(); }
-function adminAddPromise(){ ADMIN.promises.push({title:"",text:""}); buildAdminForm(); }
-function adminRemPromise(i){ ADMIN.promises.splice(i,1); buildAdminForm(); }
 
-function buildAdminForm(){
+function reasonsRepHtml(){
+  const defaultReasonEmoji = ["😍","🥰","💕","💖","🫶","🌹","✨","💘","😘","💞"];
+  return `<div id="reasonsRep">` + (ADMIN.reasons || []).map((t,i)=>{
+    const text = typeof t === "string" ? t : (t.text || "");
+    const icon = (typeof t === "object" && t.icon) ? t.icon : defaultReasonEmoji[i % defaultReasonEmoji.length];
+    return `
+      <div class="admin-repeater">
+        <div class="admin-row" style="grid-template-columns:85px 1fr">
+          <div>${field("الإيموجي","ar_icon_"+i,icon)}</div>
+          <div>${field("سبب رقم "+(i+1),"ar_text_"+i,text,"textarea")}</div>
+        </div>
+        <div class="admin-emoji-quick">
+          <small style="color:var(--gold-soft);margin-inline-end:4px">اختيار سريع:</small>
+          <span onclick="$('ar_icon_${i}').value='😍'">😍</span>
+          <span onclick="$('ar_icon_${i}').value='🥰'">🥰</span>
+          <span onclick="$('ar_icon_${i}').value='💕'">💕</span>
+          <span onclick="$('ar_icon_${i}').value='💖'">💖</span>
+          <span onclick="$('ar_icon_${i}').value='🫶'">🫶</span>
+          <span onclick="$('ar_icon_${i}').value='🌹'">🌹</span>
+          <span onclick="$('ar_icon_${i}').value='✨'">✨</span>
+          <span onclick="$('ar_icon_${i}').value='💘'">💘</span>
+          <span onclick="$('ar_icon_${i}').value='🤍'">🤍</span>
+          <span onclick="$('ar_icon_${i}').value='🌸'">🌸</span>
+        </div>
+        <button type="button" class="admin-del" onclick="event.preventDefault();adminRemReason(${i})">حذف السبب</button>
+      </div>`;
+  }).join("") + `</div>
+  <button type="button" class="admin-add" onclick="event.preventDefault();adminAddReason()">+ ضيف سبب</button>`;
+}
+
+function promisesRepHtml(){
+  const defaultPromiseEmoji = ["🤝","💍","🌅","🕊️","⭐","💌"];
+  return `<div id="promRep">` + (ADMIN.promises || []).map((p,i)=>{
+    const icon = (p && p.icon) ? p.icon : defaultPromiseEmoji[i % defaultPromiseEmoji.length];
+    return `
+      <div class="admin-repeater">
+        <div class="admin-row" style="grid-template-columns:85px 1fr 1.2fr">
+          <div>${field("الإيموجي","ap_icon_"+i,icon)}</div>
+          <div>${field("عنوان الوعد","ap_title_"+i,p.title)}</div>
+          <div>${field("الوصف","ap_text_"+i,p.text)}</div>
+        </div>
+        <div class="admin-emoji-quick">
+          <small style="color:var(--gold-soft);margin-inline-end:4px">اختيار سريع:</small>
+          <span onclick="$('ap_icon_${i}').value='🤝'">🤝</span>
+          <span onclick="$('ap_icon_${i}').value='💍'">💍</span>
+          <span onclick="$('ap_icon_${i}').value='🌅'">🌅</span>
+          <span onclick="$('ap_icon_${i}').value='🕊️'">🕊️</span>
+          <span onclick="$('ap_icon_${i}').value='⭐'">⭐</span>
+          <span onclick="$('ap_icon_${i}').value='💌'">💌</span>
+          <span onclick="$('ap_icon_${i}').value='🔒'">🔒</span>
+          <span onclick="$('ap_icon_${i}').value='👑'">👑</span>
+          <span onclick="$('ap_icon_${i}').value='🏡'">🏡</span>
+          <span onclick="$('ap_icon_${i}').value='💫'">💫</span>
+        </div>
+        <button type="button" class="admin-del" onclick="event.preventDefault();adminRemPromise(${i})">حذف الوعد</button>
+      </div>`;
+  }).join("") + `</div>
+  <button type="button" class="admin-add" onclick="event.preventDefault();adminAddPromise()">+ ضيف وعد</button>`;
+}
+
+window.adminAddStory = function(){
+  syncStoryFromDOM();
+  ADMIN.story.push({date:"",title:"",text:""});
+  const sec = $("storySec");
+  if(sec) sec.innerHTML = storyRepHtml();
+};
+window.adminRemStory = function(i){
+  syncStoryFromDOM();
+  ADMIN.story.splice(i,1);
+  const sec = $("storySec");
+  if(sec) sec.innerHTML = storyRepHtml();
+};
+
+window.adminAddMem = function(){
+  syncMemFromDOM();
+  ADMIN.memories.push({image:"",date:"",title:""});
+  const sec = $("memSec");
+  if(sec){
+    sec.innerHTML = memRepHtml();
+    wireAdminUploads();
+  }
+};
+window.adminRemMem = function(i){
+  syncMemFromDOM();
+  ADMIN.memories.splice(i,1);
+  const sec = $("memSec");
+  if(sec){
+    sec.innerHTML = memRepHtml();
+    wireAdminUploads();
+  }
+};
+
+window.adminAddReason = function(){
+  syncReasonsFromDOM();
+  ADMIN.reasons.push("");
+  const sec = $("reasonsSec");
+  if(sec) sec.innerHTML = reasonsRepHtml();
+};
+window.adminRemReason = function(i){
+  syncReasonsFromDOM();
+  ADMIN.reasons.splice(i,1);
+  const sec = $("reasonsSec");
+  if(sec) sec.innerHTML = reasonsRepHtml();
+};
+
+window.adminAddPromise = function(){
+  syncPromisesFromDOM();
+  ADMIN.promises.push({title:"",text:""});
+  const sec = $("promisesSec");
+  if(sec) sec.innerHTML = promisesRepHtml();
+};
+window.adminRemPromise = function(i){
+  syncPromisesFromDOM();
+  ADMIN.promises.splice(i,1);
+  const sec = $("promisesSec");
+  if(sec) sec.innerHTML = promisesRepHtml();
+};
+
+function buildAdminForm(loadInitial = true){
   const d = SITE_DATA;
-  ADMIN.story = d.story.slice().map(o=>({date:o.date, title:o.title, text:o.text}));
-  ADMIN.memories = d.memories.slice().map(o=>({image:o.image, date:o.date, title:o.title}));
-  ADMIN.reasons = (d.reasons.items || []).slice();
-  ADMIN.promises = (d.promises.items || []).slice().map(o=>({title:o.title, text:o.text}));
+  if(loadInitial){
+    ADMIN.story = (d.story || []).map(o=>({date:o.date||"", title:o.title||"", text:o.text||""}));
+    ADMIN.memories = (d.memories || []).map(o=>({image:o.image||"", date:o.date||"", title:o.title||""}));
+    const defaultReasonEmoji = ["😍","🥰","💕","💖","🫶","🌹","✨","💘","😘","💞"];
+    const defaultPromiseEmoji = ["🤝","💍","🌅","🕊️","⭐","💌"];
+    ADMIN.reasons = ((d.reasons && d.reasons.items) || []).map((t, idx)=>({
+      icon: (typeof t === "object" && t.icon) ? t.icon : defaultReasonEmoji[idx % defaultReasonEmoji.length],
+      text: typeof t === "string" ? t : (t.text || "")
+    }));
+    ADMIN.promises = ((d.promises && d.promises.items) || []).map((o, idx)=>({
+      icon: (o && o.icon) ? o.icon : defaultPromiseEmoji[idx % defaultPromiseEmoji.length],
+      title: o.title || "",
+      text: o.text || ""
+    }));
+  }
 
   let h = "";
   h += `<h3 class="ad">الأساسيات</h3><div class="admin-row">`;
@@ -1307,14 +1678,14 @@ function buildAdminForm(){
     <div style="width:100%">${field("رابط الصورة الرئيسية (بيتعبي أوتوماتيك بعد الرفع)","af_heroImage",d.hero.image,"url")}</div>
   </div>`;
 
-  h += `<h3 class="ad">حكايتكم (الخط الزمني)</h3>` + storyRepHtml();
-  h += `<h3 class="ad">لحظاتكم (الذكريات)</h3>` + memRepHtml();
+  h += `<h3 class="ad">حكايتكم (الخط الزمني)</h3><div id="storySec">` + storyRepHtml() + `</div>`;
+  h += `<h3 class="ad">كل لحظة معاكي ليها حكاية (الصور والذكريات)</h3><div id="memSec">` + memRepHtml() + `</div>`;
   h += `<h3 class="ad">ليه بحبك</h3>`;
   h += field("العنوان","af_reasonsTitle",d.reasons.title);
-  h += field("الوصف","af_reasonsSub",d.reasons.sub,"textarea") + reasonsRepHtml();
+  h += field("الوصف","af_reasonsSub",d.reasons.sub,"textarea") + `<div id="reasonsSec">` + reasonsRepHtml() + `</div>`;
   h += `<h3 class="ad">وعود قلبي</h3>`;
   h += field("العنوان","af_promisesTitle",d.promises.title);
-  h += field("الوصف","af_promisesSub",d.promises.sub,"textarea") + promisesRepHtml();
+  h += field("الوصف","af_promisesSub",d.promises.sub,"textarea") + `<div id="promisesSec">` + promisesRepHtml() + `</div>`;
 
   h += `<h3 class="ad">الرسالة الخاصة</h3>`;
   h += field("العنوان","af_noteHeading",d.note.heading);
@@ -1330,11 +1701,11 @@ function buildAdminForm(){
   h += `</div>`;
   h += field("نص الختام","af_finalText",d.final.text,"textarea");
 
-  h += `<h3 class="ad">الأغنية</h3><div class="admin-row">`;
-  h += `<div>${field("تفعيل زرار الأغنية","af_musicEnabled",d.music.enabled,"checkbox")}</div>`;
+  h += `<h3 class="ad">الأغنية والموسيقى</h3><div class="admin-row">`;
+  h += `<div>${field("تفعيل زرار وأيقونة الأغنية 🎵","af_musicEnabled",d.music.enabled,"checkbox")}</div>`;
   h += `<div>${field("رسالة الحب","af_musicMsg",d.music.message)}</div>`;
   h += `</div>`;
-  h += field("رابط يوتيوب (بياخد الصوت بس)","af_musicYoutube",d.music.youtube,"url");
+  h += field("رابط يوتيوب (بياخد الصوت بس، ويظهر الفيديو أوتوماتيك لو في إعلان لتخطيه)","af_musicYoutube",d.music.youtube,"url");
   h += field("أو رابط MP3 مباشر","af_musicUrl",d.music.url,"url");
 
   $("adminBody").innerHTML = h;
@@ -1343,6 +1714,10 @@ function buildAdminForm(){
 }
 
 function collectFromAdminForm(){
+  syncStoryFromDOM();
+  syncMemFromDOM();
+  syncReasonsFromDOM();
+  syncPromisesFromDOM();
   const src = SITE_DATA;
   const data = {
     names: { first: $v("af_first"), second: $v("af_second") },
@@ -1352,27 +1727,18 @@ function collectFromAdminForm(){
       description: $v("af_heroDesc"), dateLabel: $v("af_heroDateLabel"), date: $v("af_heroDate"),
       image: $v("af_heroImage"), photoTag: $v("af_heroTag")
     },
-    story: [...document.querySelectorAll("#storyRep .admin-repeater")].map(row=>({
-      date: row.querySelector('[id^="as_date_"]').value,
-      title: row.querySelector('[id^="as_title_"]').value,
-      text: row.querySelector('[id^="as_text_"]').value
-    })),
-    memories: [...document.querySelectorAll("#memRep .admin-repeater")].map(row=>({
-      image: row.querySelector('[id^="am_img_"]').value,
-      date: row.querySelector('[id^="am_date_"]').value,
-      title: row.querySelector('[id^="am_title_"]').value
-    })),
+    story: ADMIN.story.slice(),
+    memories: ADMIN.memories.slice(),
     reasons: {
       title: $v("af_reasonsTitle"), sub: $v("af_reasonsSub"),
-      items: [...document.querySelectorAll("#reasonsRep .admin-repeater")].map(row=>
-        row.querySelector('[id^="ar_text_"]').value.trim()).filter(Boolean)
+      items: ADMIN.reasons.map(r=>({
+        icon: (r && r.icon) ? r.icon : "💖",
+        text: typeof r === "string" ? r : (r.text || "")
+      })).filter(r=>Boolean(r.text))
     },
     promises: {
       title: $v("af_promisesTitle"), sub: $v("af_promisesSub"),
-      items: [...document.querySelectorAll("#promRep .admin-repeater")].map(row=>({
-        title: row.querySelector('[id^="ap_title_"]').value,
-        text: row.querySelector('[id^="ap_text_"]').value
-      }))
+      items: ADMIN.promises.slice()
     },
     note: { heading: $v("af_noteHeading"), text: $v("af_noteText"), signature: $v("af_noteSignature") },
     counter: {
@@ -1383,9 +1749,9 @@ function collectFromAdminForm(){
     final: { titleLine1: $v("af_final1"), titleLine2: $v("af_final2"), text: $v("af_finalText") },
     music: {
       enabled: $chk("af_musicEnabled"),
-      url: $v("af_musicUrl").trim(),
+      message: $v("af_musicMsg"),
       youtube: $v("af_musicYoutube").trim(),
-      message: $v("af_musicMsg").trim()
+      url: $v("af_musicUrl").trim()
     }
   };
   return data;
