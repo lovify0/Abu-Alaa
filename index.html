@@ -376,8 +376,8 @@ img{max-width:100%;display:block}
 @keyframes twinkle{0%,100%{opacity:0}50%{opacity:.85}}
 
 /* ============ LIGHTBOX ============ */
-.lightbox{position:fixed;inset:0;background:rgba(12,6,9,.92);z-index:70;display:grid;place-items:center;padding:24px;opacity:0;visibility:hidden;transition:.35s}
-.lightbox.open{opacity:1;visibility:visible}
+.lightbox{position:fixed;inset:0;background:rgba(12,6,9,.92);z-index:70;display:none;place-items:center;padding:24px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease}
+.lightbox.open{display:grid;opacity:1;visibility:visible;pointer-events:auto}
 .lightbox img{max-width:min(900px,95vw);max-height:85vh;border-radius:14px;box-shadow:0 30px 100px rgba(0,0,0,.5)}
 .close-lightbox{position:absolute;top:22px;inset-inline-end:22px;border:1px solid rgba(247,234,214,.3);background:transparent;color:var(--paper);border-radius:50%;width:42px;height:42px;cursor:pointer;font-size:19px}
 
@@ -430,43 +430,8 @@ img{max-width:100%;display:block}
 .music-label .mini-heart{color:var(--rose);display:inline-block;animation:heartbeat 1.2s ease-in-out infinite}
 @keyframes heartbeat{0%,100%{transform:scale(1)}25%{transform:scale(1.25)}45%{transform:scale(.95)}65%{transform:scale(1.12)}}
 
-/* ============ مشغّل يوتيوب العائم (يظهر عند الإعلانات ويختفي أوتوماتيك) ============ */
-.yt-player-dock{
-  position:fixed;bottom:90px;left:16px;z-index:48;
-  width:1px;height:1px;opacity:0;pointer-events:none;overflow:hidden;
-  transition:opacity .3s ease,transform .3s ease;
-  transform:translateY(12px) scale(.96);
-}
-.yt-player-dock.active{
-  width:min(340px,calc(100vw - 32px));height:auto;opacity:1;pointer-events:auto;overflow:visible;
-  transform:translateY(0) scale(1);
-}
-.yt-player-box{
-  background:rgba(26,11,20,.96);backdrop-filter:blur(16px);
-  border:1px solid rgba(202,162,90,.38);border-radius:16px;padding:12px;
-  box-shadow:0 24px 70px rgba(0,0,0,.7),0 0 0 1px rgba(247,234,214,.1);
-}
-.yt-player-header{
-  display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-size:11.5px;
-}
-.yt-header-badge{display:flex;align-items:center;gap:6px;color:var(--gold-soft);font-weight:700}
-.yt-pulse-dot{width:8px;height:8px;border-radius:50%;background:#ff4757;animation:pulse 1.2s infinite}
-.yt-ctrl-btn{
-  background:rgba(247,234,214,.12);border:1px solid var(--line);color:var(--paper);
-  border-radius:999px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;transition:.2s;
-}
-.yt-ctrl-btn:hover{background:rgba(202,162,90,.25);color:var(--gold)}
-.yt-frame-slot{width:100%;aspect-ratio:16/9;border-radius:10px;overflow:hidden;background:#000}
-.yt-frame-slot iframe{width:100%;height:100%;border:0;display:block}
-.yt-player-tip{font-size:11px;color:var(--muted);margin-top:8px;line-height:1.5;text-align:center}
-.yt-toggle-btn{
-  background:rgba(33,15,24,.88);backdrop-filter:blur(10px);
-  border:1px solid rgba(202,162,90,.4);color:var(--gold-soft);
-  border-radius:999px;padding:8px 14px;font-size:12px;font-family:inherit;font-weight:700;
-  cursor:pointer;display:inline-flex;align-items:center;gap:6px;
-  box-shadow:0 8px 24px rgba(0,0,0,.35);transition:.2s;
-}
-.yt-toggle-btn:hover{background:var(--gold);color:#241019}
+/* تشغيل الصوت في الخلفية بدون أي ظهور للفيديو */
+#ytBgContainer{position:fixed;width:1px;height:1px;left:-9999px;bottom:-9999px;opacity:0.001;pointer-events:none;overflow:hidden}
 
 .music-bubble.playing ~ .music-label .mini-heart{animation:heartbeat .7s ease-in-out infinite}
 
@@ -530,6 +495,79 @@ img{max-width:100%;display:block}
 .admin-emoji-quick{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0 10px;align-items:center}
 .admin-emoji-quick span{cursor:pointer;font-size:16px;padding:2px 6px;background:rgba(247,234,214,.08);border-radius:6px;transition:.2s}
 .admin-emoji-quick span:hover{background:rgba(202,162,90,.3);transform:scale(1.2)}
+
+
+/* ============ نافذة التنبيه والرسائل المخصصة (بديل alert) ============ */
+.love-modal-backdrop{
+  position:fixed;inset:0;background:rgba(12,6,9,.84);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  z-index:95;display:none;place-items:center;padding:20px;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .35s ease, visibility .35s ease;
+}
+.love-modal-backdrop.open{
+  display:grid;opacity:1;visibility:visible;pointer-events:auto;
+}
+.love-modal-card{
+  width:min(440px, 92vw);
+  background:linear-gradient(165deg, rgba(38,18,28,.98), rgba(22,10,16,.98));
+  border:1px solid rgba(247,234,214,.22);
+  border-radius:24px;
+  padding:30px 24px 26px;
+  text-align:center;
+  box-shadow:0 30px 90px rgba(0,0,0,.65), 0 0 0 1px rgba(202,162,90,.15);
+  transform:scale(.92) translateY(14px);
+  transition:transform .35s cubic-bezier(.2,.7,.2,1);
+  position:relative;
+  direction:rtl;
+  font-family:'Tajawal', sans-serif;
+}
+.love-modal-backdrop.open .love-modal-card{
+  transform:scale(1) translateY(0);
+}
+.love-modal-icon{
+  width:62px;height:62px;border-radius:50%;margin:0 auto 16px;
+  background:radial-gradient(circle at 35% 30%, var(--gold-soft), var(--rose) 78%);
+  display:grid;place-items:center;font-size:26px;color:#f7ead6;
+  box-shadow:0 12px 30px rgba(140,51,72,.45);
+  animation:heartbeat 1.8s ease-in-out infinite;
+}
+.love-modal-close{
+  position:absolute;top:14px;inset-inline-end:16px;
+  width:32px;height:32px;border-radius:50%;
+  border:1px solid rgba(247,234,214,.2);background:transparent;
+  color:var(--muted);font-size:18px;cursor:pointer;
+  display:grid;place-items:center;transition:.2s;
+}
+.love-modal-close:hover{
+  color:var(--paper);background:rgba(247,234,214,.1);
+}
+.love-modal-title{
+  font-family:'Aref Ruqaa', serif;
+  font-size:24px;color:var(--paper);margin-bottom:10px;font-weight:normal;
+}
+.love-modal-msg{
+  font-size:14.5px;line-height:1.85;color:var(--muted);margin-bottom:24px;
+}
+.love-modal-actions{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;
+}
+.love-modal-btn{
+  border:0;border-radius:999px;padding:11px 26px;
+  font-size:13.5px;font-weight:700;cursor:pointer;
+  font-family:inherit;transition:transform .2s, box-shadow .2s;
+}
+.love-modal-btn:hover{
+  transform:translateY(-2px);
+}
+.love-modal-btn-primary{
+  background:linear-gradient(135deg, var(--gold), var(--gold-soft));
+  color:var(--ink);box-shadow:0 8px 24px rgba(202,162,90,.3);
+}
+.love-modal-btn-secondary{
+  background:rgba(247,234,214,.1);color:var(--paper);
+  border:1px solid rgba(247,234,214,.2);
+}
 
 </style>
 </head>
@@ -862,33 +900,14 @@ const SITE_DATA = {
   <img id="lightboxImage" alt="ذكرى">
 </div>
 
-<!-- مشغّل الفيديو العائم ليوتيوب: مخفي افتراضيًا وصوت فقط، ويظهر فقط لو في إعلان لعمل تخطي -->
-<div class="yt-player-dock" id="ytPlayerDock" aria-hidden="true">
-  <div class="yt-player-box" id="ytPlayerBox">
-    <div class="yt-player-header">
-      <div class="yt-header-badge">
-        <span class="yt-pulse-dot"></span>
-        <span id="ytStatusText">إعلان شغال — اضغط تخطي (Skip) ⏭️</span>
-      </div>
-      <div class="yt-player-ctrls">
-        <button type="button" class="yt-ctrl-btn" id="ytHideBtn" title="إخفاء الفيديو والاستماع للصوت فقط">_ إخفاء الفيديو</button>
-      </div>
-    </div>
-    <div class="yt-frame-slot" id="ytFrameSlot"></div>
-    <div class="yt-player-tip" id="ytPlayerTip">
-      زرار Skip الإعلان بيظهر داخل الفيديو. بمجرد التخطي الفيديو بيختفي وبيكمّل صوت بس.
-    </div>
-  </div>
-</div>
+<div id="ytBgContainer" aria-hidden="true"></div>
 
 <div class="music-dock" id="musicDock" style="display:none">
   <button class="music-bubble" id="musicBubble" type="button" aria-label="تشغيل الأغنية">
     <span class="music-rings"><span></span><span></span><span></span></span>
     <span class="music-glyph" id="musicGlyph">🎵</span>
   </button>
-  <button class="yt-toggle-btn" id="ytToggleBtn" type="button" style="display:none" title="إظهار / إخفاء الفيديو لتخطي الإعلانات">
-    📺 <span id="ytToggleLabel">تخطي الإعلان</span>
-  </button>
+  
   <div class="music-label" id="musicLabel"></div>
 </div>
 <audio id="audio" loop preload="none"></audio>
@@ -906,6 +925,18 @@ const SITE_DATA = {
       <span class="admin-status" id="adminStatus">كل التعديلات بتتحفظ وتتظهر للبنت على نفس اللينك 💾</span>
       <button class="admin-save" id="adminSave" type="button">احفظ وانشر 💾</button>
     </div>
+  </div>
+</div>
+
+
+<!-- نافذة التنبيه والرسائل المخصصة (بديل alert) -->
+<div class="love-modal-backdrop" id="loveModal" aria-hidden="true" role="dialog">
+  <div class="love-modal-card">
+    <button class="love-modal-close" id="loveModalClose" type="button" aria-label="إغلاق">×</button>
+    <div class="love-modal-icon" id="loveModalIcon">💌</div>
+    <h3 class="love-modal-title" id="loveModalTitle">رسالة</h3>
+    <p class="love-modal-msg" id="loveModalMsg"></p>
+    <div class="love-modal-actions" id="loveModalActions"></div>
   </div>
 </div>
 
@@ -1005,6 +1036,64 @@ function applyData(){
 }
 applyData();
 
+/* ============ نافذة الرسائل والتنبيهات المخصصة (بديل alert) ============ */
+function showModal({ icon="💌", title="رسالة", message="", buttons=[] } = {}){
+  const modal = $("loveModal");
+  if(!modal) return;
+  $("loveModalIcon").textContent = icon;
+  $("loveModalTitle").textContent = title;
+  $("loveModalMsg").textContent = message;
+  const actions = $("loveModalActions");
+  actions.innerHTML = "";
+
+  if(!buttons || !buttons.length){
+    buttons = [{ text: "تمام ❤", primary: true }];
+  }
+
+  buttons.forEach(btn => {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "love-modal-btn " + (btn.primary ? "love-modal-btn-primary" : "love-modal-btn-secondary");
+    b.textContent = btn.text;
+    b.addEventListener("click", () => {
+      closeModal();
+      if(typeof btn.onClick === "function") btn.onClick();
+    });
+    actions.appendChild(b);
+  });
+
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+}
+
+function closeModal(){
+  const modal = $("loveModal");
+  if(!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+if($("loveModalClose")) $("loveModalClose").addEventListener("click", closeModal);
+if($("loveModal")){
+  $("loveModal").addEventListener("click", e => {
+    if(e.target === $("loveModal")) closeModal();
+  });
+}
+document.addEventListener("keydown", e => {
+  if(e.key === "Escape" && $("loveModal") && $("loveModal").classList.contains("open")) closeModal();
+});
+
+// استبدال دالة alert في المتصفح بالكامل لتستخدم النافذة الأنيقة
+window.alert = function(msg){
+  showModal({
+    icon: "💌",
+    title: "رسالة حب ❤",
+    message: String(msg || ""),
+    buttons: [{ text: "حسناً ❤", primary: true }]
+  });
+};
+
+
 /* فتح الظرف بالكلمة السرية — كلمة البنت بتفتح الموقع، وكلمة الولد بتفتح موقع + لوحة تعديل */
 function unlock(){
   const value = $("secretInput").value.trim().toLowerCase();
@@ -1080,13 +1169,11 @@ const observer = new IntersectionObserver(entries=>{
 },{threshold:.12});
 document.querySelectorAll(".reveal").forEach(el=>observer.observe(el));
 
-/* ===== الأغنية: يوتيوب (صوت بس بالديفولت، ويظهر الفيديو فقط لو في إعلان لتخطيه) ===== */
+/* ===== الأغنية: تشغيل في الخلفية فقط (صوت فقط بدون أي ظهور للفيديو) ===== */
 const musicBubble=$("musicBubble");
 const musicGlyph=$("musicGlyph");
 let ytFrame=null;
 let ytCurrentVideoId=null;
-let ytIsAdPlaying=false;
-let ytUserManuallyOpened=false;
 
 function ytVideoId(url){
   const m=String(url||"").match(/(?:youtube\.com\/(?:watch\?[^#]*v=|embed\/|shorts\/|live\/)|youtu\.be\/|music\.youtube\.com\/watch\?[^#]*v=)([\w-]{11})/);
@@ -1098,65 +1185,39 @@ function setMusicUI(playing){
   musicGlyph.textContent = playing ? "⏸" : "🎵";
 }
 
-function showVideoPopup(show, reasonText){
-  const dock = $("ytPlayerDock");
-  const toggleBtn = $("ytToggleBtn");
-  const statusTxt = $("ytStatusText");
-  if(!dock) return;
-  if(show){
-    dock.classList.add("active");
-    dock.setAttribute("aria-hidden", "false");
-    if(statusTxt && reasonText) statusTxt.textContent = reasonText;
-    if(toggleBtn){
-      toggleBtn.style.display = "inline-flex";
-      $("ytToggleLabel").textContent = "إخفاء الفيديو";
-    }
-  }else{
-    dock.classList.remove("active");
-    dock.setAttribute("aria-hidden", "true");
-    if(toggleBtn){
-      toggleBtn.style.display = ytFrame ? "inline-flex" : "none";
-      $("ytToggleLabel").textContent = "تخطي الإعلان 📺";
-    }
+function getOrCreateYtContainer(){
+  let c = $("ytBgContainer");
+  if(!c){
+    c = document.createElement("div");
+    c.id = "ytBgContainer";
+    c.setAttribute("aria-hidden", "true");
+    document.body.appendChild(c);
   }
-}
-
-function handleAdStateChange(isAd){
-  ytIsAdPlaying = isAd;
-  if(isAd){
-    // إعلان شغال: يظهر الفيديو فوراً لتمكين المستخدم من الضغط على تخطي الإعلان (Skip)
-    showVideoPopup(true, "إعلان شغال — اضغط تخطي (Skip) ⏭️");
-  }else{
-    // لا يوجد إعلان أو تم تخطيه: يتم إخفاء الفيديو أوتوماتيكياً والاستمرار كصوت فقط
-    if(!ytUserManuallyOpened){
-      showVideoPopup(false);
-    }
-  }
+  return c;
 }
 
 function startYouTube(videoId){
-  if(ytFrame) stopYouTube();
+  const container = getOrCreateYtContainer();
+  if(ytFrame && ytCurrentVideoId === videoId){
+    try{
+      ytFrame.contentWindow.postMessage(JSON.stringify({ event: "command", func: "playVideo", args: "" }), "*");
+      setMusicUI(true);
+      return;
+    }catch(e){}
+  }
+  container.innerHTML = "";
   ytCurrentVideoId = videoId;
-  ytIsAdPlaying = false;
-  ytUserManuallyOpened = false;
 
   const frame = document.createElement("iframe");
-  // استخدام youtube-nocookie لتخفيف الإعلانات + تمكين jsapi لمتابعة حالة الإعلانات
-  frame.src = "https://www.youtube-nocookie.com/embed/" + videoId + "?autoplay=1&enablejsapi=1&playsinline=1&rel=0";
-  frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture; fullscreen");
-  frame.setAttribute("allowFullScreen", "");
-  frame.title = "مشغّل الأغنية";
+  // تشغيل الصوت في الخلفية دائماً مع التكرار المستمر
+  frame.src = "https://www.youtube-nocookie.com/embed/" + videoId + "?autoplay=1&enablejsapi=1&playsinline=1&rel=0&loop=1&playlist=" + videoId;
+  frame.setAttribute("allow", "autoplay; encrypted-media");
+  frame.title = "خلفية صوتية";
 
-  $("ytFrameSlot").innerHTML = "";
-  $("ytFrameSlot").appendChild(frame);
+  container.appendChild(frame);
   ytFrame = frame;
-
-  // الديفولت: الفيديو غير ظاهر (صوت فقط)
-  showVideoPopup(false);
-  if($("ytToggleBtn")) $("ytToggleBtn").style.display = "inline-flex";
   setMusicUI(true);
 
-  // إرسال رسالة استماع للإطار لضمان استلام إشعارات infoDelivery عند بدء إعلانات
   frame.addEventListener("load", ()=>{
     try{
       frame.contentWindow.postMessage(JSON.stringify({ event: "listening", id: 1, channel: "widget" }), "*");
@@ -1164,62 +1225,39 @@ function startYouTube(videoId){
   });
 }
 
-function stopYouTube(){
+function stopYouTube(destroy = false){
   if(ytFrame){
-    $("ytFrameSlot").innerHTML = "";
-    ytFrame = null;
+    if(destroy){
+      const c = $("ytBgContainer");
+      if(c) c.innerHTML = "";
+      ytFrame = null;
+    }else{
+      try{
+        ytFrame.contentWindow.postMessage(JSON.stringify({ event: "command", func: "pauseVideo", args: "" }), "*");
+      }catch(e){
+        const c = $("ytBgContainer");
+        if(c) c.innerHTML = "";
+        ytFrame = null;
+      }
+    }
   }
-  showVideoPopup(false);
-  if($("ytToggleBtn")) $("ytToggleBtn").style.display = "none";
   setMusicUI(false);
 }
 
-// متابعة رسائل مشغّل يوتيوب لاكتشاف الإعلانات أوتوماتيكياً
+// متابعة حالة المشغّل لتحديث أيقونة التشغيل/الإيقاف
 window.addEventListener("message", e => {
   if(!ytFrame) return;
   try{
     const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
     if(!data) return;
-
     if(data.event === "infoDelivery" && data.info){
-      const info = data.info;
-      let isAd = false;
-      if(info.adState != null && info.adState !== 0) isAd = true;
-      else if(info.isAd === true) isAd = true;
-      else if(info.adVideoId && info.adVideoId !== ytCurrentVideoId) isAd = true;
-      else if(info.videoData && info.videoData.isAd) isAd = true;
-      else if(info.videoData && info.videoData.video_id && ytCurrentVideoId && info.videoData.video_id !== ytCurrentVideoId) isAd = true;
-
-      if(info.playerState === 1 && !isAd){
-        // الأغنية الأصلية تعمل بدون إعلانات -> إخفاء الفيديو فوراً (صوت فقط)
-        handleAdStateChange(false);
-      }else if(isAd){
-        // إعلان بدأ -> إظهار الفيديو لتخطي الإعلان
-        handleAdStateChange(true);
+      if(data.info.playerState === 1){
+        setMusicUI(true);
+      }else if(data.info.playerState === 2){
+        setMusicUI(false);
       }
-    }else if(data.event === "onAdStart" || data.info === "adStart"){
-      handleAdStateChange(true);
-    }else if(data.event === "onAdEnd" || data.info === "adEnd"){
-      handleAdStateChange(false);
     }
   }catch(err){}
-});
-
-$("ytHideBtn").addEventListener("click", ()=>{
-  ytUserManuallyOpened = false;
-  showVideoPopup(false);
-});
-
-$("ytToggleBtn").addEventListener("click", ()=>{
-  const dock = $("ytPlayerDock");
-  const isActive = dock && dock.classList.contains("active");
-  if(isActive){
-    ytUserManuallyOpened = false;
-    showVideoPopup(false);
-  }else{
-    ytUserManuallyOpened = true;
-    showVideoPopup(true, "مشغّل الأغنية 🎵");
-  }
 });
 
 musicBubble.addEventListener("click", ()=>{
@@ -1236,7 +1274,42 @@ musicBubble.addEventListener("click", ()=>{
     else{ audio.pause(); setMusicUI(false); }
     return;
   }
-  alert("ضيف رابط الأغنية من لوحة التحكم ⚙ أو ملف الإعدادات 🎵");
+
+  // مفيش أغنية شغالة أو مضافة حالياً
+  const isBoy = (sessionStorage.getItem("storyAdmin") === "1") || ($("gearBtn") && $("gearBtn").style.display === "grid");
+  if(isBoy){
+    showModal({
+      icon: "⚙🎵",
+      title: "إضافة أغنية لحكايتكم",
+      message: "مفيش أغنية مضافة لسه.. تقدر تضيف رابط يوتيوب أو ملف صوتي من لوحة التعديل عشان تشتغل أول ما تدوس على الرمز 🎵",
+      buttons: [
+        {
+          text: "افتح لوحة التعديل ⚙",
+          primary: true,
+          onClick: () => {
+            if(typeof buildAdminForm === "function") buildAdminForm();
+            if($("adminStatus")) {
+              $("adminStatus").textContent = (typeof ghRepoStr === "function" && ghRepoStr())
+                ? "التعديلات هتتحفظ وتظهر للبنت على نفس اللينك."
+                : "المتصفح ده لسه مش مربوط بمخزن الموقع.";
+            }
+            if($("adminPanel")) $("adminPanel").classList.add("open");
+          }
+        },
+        { text: "إغلاق", primary: false }
+      ]
+    });
+  } else {
+    // البنت متعرفش إن فيه لوحة تحكم أساساً — نافذة حب رومانسية راقية بدون أي كلام عن لوحة تحكم
+    showModal({
+      icon: "❤🎵",
+      title: "نغمة حكايتنا",
+      message: "أغنيتنا وسر حكايتنا لسه بتتحضر بحب.. بس صوت دقات قلبي ليكي وضحكتك هما أجمل وأحلى لحن في الدنيا كلها ❤✨",
+      buttons: [
+        { text: "بحبك يا روحي ❤", primary: true }
+      ]
+    });
+  }
 });
 
 /* ===== زرار "بحبك" وانفجار القلوب ===== */
@@ -1322,7 +1395,7 @@ for(let i=0;i<16;i++){
 /* قلب يطلع من مكان الدوسة على الموبايل */
 document.addEventListener("click", e=>{
   const t=e.target;
-  if(t && t.closest && t.closest("button,a,.burst-btn,.music-bubble,.admin-gear,.admin-panel,.memory-card,.lightbox")) return;
+  if(t && t.closest && t.closest("button,a,.burst-btn,.music-bubble,.admin-gear,.admin-panel,.memory-card,.lightbox,.love-modal-backdrop")) return;
   const h=document.createElement("div");
   h.className="tap-heart";
   h.textContent = Math.random()>.55 ? "♥" : "❤";
@@ -1705,7 +1778,7 @@ function buildAdminForm(loadInitial = true){
   h += `<div>${field("تفعيل زرار وأيقونة الأغنية 🎵","af_musicEnabled",d.music.enabled,"checkbox")}</div>`;
   h += `<div>${field("رسالة الحب","af_musicMsg",d.music.message)}</div>`;
   h += `</div>`;
-  h += field("رابط يوتيوب (بياخد الصوت بس، ويظهر الفيديو أوتوماتيك لو في إعلان لتخطيه)","af_musicYoutube",d.music.youtube,"url");
+  h += field("رابط يوتيوب (تشغيل الصوت في الخلفية فقط 🎵)","af_musicYoutube",d.music.youtube,"url");
   h += field("أو رابط MP3 مباشر","af_musicUrl",d.music.url,"url");
 
   $("adminBody").innerHTML = h;
